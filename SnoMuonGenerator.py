@@ -1,6 +1,7 @@
 import numpy as np
 import scipy as sp
-from sp import constants as cst
+import random
+from scipy import constants as cst
 import SnoMuon as muon
 
 class SnoMuonGenerator(object):
@@ -29,7 +30,7 @@ class SnoMuonGenerator(object):
 
     #Mei and Hime function for muon intensity as a function of zenith angle
     meiHime = (I1*np.exp(-slantDepth/(lam1*np.cos(thetaRad)))+I2*np.exp(-slantDepth/(lam2*np.cos(thetaRad))))/np.cos(thetaRad) # /cm^2/second
-    meiHimeNORM = meiHimeIntensity/np.sqrt(np.sum(meiHimeIntensity**2))
+    meiHimeNORM = meiHime/np.sqrt(np.sum(meiHime**2))
 
 
 
@@ -44,4 +45,13 @@ class SnoMuonGenerator(object):
         muons = np.empty(numberOfMuons)
 
         for i in range(numberOfMuons):
-            muons[i] = SnoMuon()
+
+            #random radius
+            rho = random.random()*self.radius
+            #random theta according to the Mei Hime distribution
+            theta = np.random.choice(np.linspace(thetaRad[0],thetaRad[-1], len(meiHime)),p=meiHime)
+
+            #generate a random position on the disk
+            position = np.array(rho*np.cos(theta) + self.position[0], rho*np.sin(theta) + self.position[1], self.position[2])
+
+            muons[i] = SnoMuon(position, 1.0, )

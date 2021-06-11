@@ -28,12 +28,13 @@ class SnoMuon(object):
 
 
 
-    def __init__(self, initial_position, energy = 1.0, theta, phi = np.random.choice(self.phis)):
+    def __init__(self, initial_position, theta, energy = 1.0, phi = np.random.choice(phis)):
         '''Built to initialize a muon with a position, energy and direction
             dictated by the two angles of spherical coordinates
         '''
 
         #Basic assignment of initial position
         self.r = initial_position
-
+        self.theta = theta
+        self.energy = energy
         self.phi = phi  #Radially symmetric
