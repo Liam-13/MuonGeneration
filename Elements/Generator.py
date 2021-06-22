@@ -1,46 +1,65 @@
-####################################################
-#                 Generator Class                  #
-#      Disk-Shaped Generator for Particles         #
-#        Based in Cylindrical Coordinates          #
-####################################################
-import random
 import numpy as np
-import math
+import scipy as sp
+import random
+from scipy import constants as cst
+import SnoMuon as muon
 
-class Generator:
-    '''A Generator Class meant to yield positions for particles'''
+class SnoMuonGenerator(object):
+    '''A class for a circular generator of muons located with the overburden of SNOLAB.
+            The overburden comes into play with the muon's instantiated directions and energies.
 
-    radius = 1.
-    #Cylindrical coordinates
-    centre = np.array([0.,0.,1.])
+    Attributes:
+    **********
 
-    def __init__(self, radius = 1., position = np.array([0.,0.,1.])):
-        '''Generator constructor takes a radius and a position'''
+    radius   :    the radius of the generator disk (m)
+    r        :    position in 3-space -> some kind of array [ x , y , z ] w.r.t the centre
+    meiHime  :    the muon intensity w.r.t. the zenith angle, taken from the famous Mei and Hime paper
 
+    '''
+
+
+
+    def __init__(self, radius, position = np.array([0.,0.,10.])):
         self.radius = radius
-        self.centre = position
+        self.position = position
 
-    def generatePositions(self, number):
-        '''Generates a numpy array of absolute positions in cylindrical coordinates'''
+    def generateMuons(self, numberOfMuons):
+        '''Generates a number of muons at random positions on the Disk
+            with zenith angles according to the Mei Hime function and random phi angles
 
-        #Array for positions
-                            #"number" of rows, each with 3 columns
-        positions = np.empty((number,3))
+            NOTE: Energy has not yet been worked out.
+        '''
+        muons = [] #np.empty(numberOfMuons)
 
-        x_centre = self.centre[0]*np.cos(self.centre[1])
-        y_centre = self.centre[0]*np.sin(self.centre[1])
+        slantDepth = 6.011 #km w.e.
+        I1 = 8.60e-6 # ± 0.53e-6 /sec/cm^2/sr
+        I2 = 0.44e-6 # ± 0.06e-6 /sec/cm^2/sr
+        lam1 = 0.45 # ± 0.01 km.w.e.
+        lam2 = 0.87 # ± 0.02 km.w.e.
+
+        resolution = 1000
+        thetaRad = np.linspace(0, np.pi/2, resolution)
+
+        #Muon Angular distribution intensity
+        meiHime = (I1*np.exp(-slantDepth/(lam1*np.cos(thetaRad)))+I2*np.exp(-slantDepth/(lam2*np.cos(thetaRad))))/np.cos(thetaRad)
+
+        meiHime = meiHime / np.sqrt(meiHime.sum()**2) #Normalizes the mei hime distribution function
+
+        #Defining a random angle
+        theta = np.random.choice(np.linspace(thetaRad[0],thetaRad[-1], len(meiHime)),p=meiHime)
 
 
-        for i in range(number):
-            theta = random.random()*np.pi*2
-            rho = random.random()*self.radius #relative centre of generator disk
 
-            x_rho = rho*np.cos(theta)
-            y_rho = rho*np.sin(theta)
+        for i in range(numberOfMuons):
 
-            realRho = math.sqrt((x_rho+x_centre)**2 + (y_rho+y_centre)**2) #With respect to absolute position, not just generator centre
-            realTheta = np.arctan((y_rho+y_centre)/(x_rho+x_centre))
+            #random radius
+            rho = random.random()*self.radius
+            #random theta according to the Mei Hime distribution
+            theta = np.random.choice(np.linspace(thetaRad[0],thetaRad[-1], len(meiHime)),p=meiHime)
 
-            positions[i] = [realRho, realTheta, self.centre[2]] #absolute positions
+            #generate a random position on the disk
+            position = np.array([rho*np.cos(theta) + self.position[0], rho*np.sin(theta) + self.position[1], self.position[2]])
 
-        return positions
+            muons.append(muon.SnoMuon(position, 1.0, theta ))
+
+        return muons

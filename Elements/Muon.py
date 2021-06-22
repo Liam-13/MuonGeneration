@@ -4,55 +4,58 @@
 #               And Distribution Data              #
 ####################################################
 
+
 import numpy as np
-import random
-import matplotlib.pyplot as plt
+import scipy.constants as cst
 
-class Muon:
-    '''A Muon class for sourcing the attributes and distribution functions for Muons'''
+class SnoMuon(object):
+    '''The Muon class for our favourite particle to veto. Attenuated by the SNOLAB overburden.
 
-    #Muons have a position and momentum in Cylindrical Coordinates
-    position = np.array(3)
-    momentum = np.array(3)
+    Attributes:
+    **********
 
-    slantDepth = 6.011 #km w.e.
-    I1 = 8.60e-6 # ± 0.53e-6 /sec/cm^2/sr
-    I2 = 0.44e-6 # ± 0.06e-6 /sec/cm^2/sr
-    lam1 = 0.45 # ± 0.01 km.w.e.
-    lam2 = 0.87 # ± 0.02 km.w.e.
+    charge   :    the elementary charge -> from CODATA
+    mass     :    ordinary mass of muons -> from CODATA
+    r        :    position in 3-space -> some kind of array [ x , y , z ]
+    energy   :    due to attenuation in the overburden, muon energy is random, but not totally.
+    dir      :    direction of Muon propagation
+    mom      :    momentum in 3-space -> some kind of array
+
+    '''
+
+    #All muons have:
+
+    mass = cst.value('muon mass') #From CODATA
+    charge = cst.e #From CODATA
+
+    #For random choices
+    angleResolution = 1000
+    phis = np.linspace(0,np.pi*2,angleResolution) #Arbitrary resolution at 1000 different angles
+
+    #Zenith angle distribution according to Mei and Hime 2004
 
 
-    resolution = 1000
-    thetaRad = np.linspace(0, np.pi/2, resolution)
 
-    #Muon Angular distribution intensity
-    meiHime = (I1*np.exp(-slantDepth/(lam1*np.cos(thetaRad)))+I2*np.exp(-slantDepth/(lam2*np.cos(thetaRad))))/np.cos(thetaRad)
+    def __init__(self, initial_position, theta, energy = 1.0, phi = np.random.choice(phis)):
+        '''Built to initialize a muon with a position, energy and direction
+            dictated by the two angles of spherical coordinates
+        '''
 
-    #Defining a random angle
-    theta = np.random.choice(np.linspace(thetaRad[0],thetaRad[-1], len(meiHime)),p=meiHime)
+        #Basic assignment of initial position
+        self.r = initial_position
+        self.theta = theta
+        self.energy = energy
+        self.phi = phi  #Radially symmetric
 
-    #Constructor
-    def __init__(self, position, momentum):
-        '''Constructor function for the Muon. Position and Momentum as np arrays in cylindrical coordinates'''
-        self.position = position
-        self.momentum = momentum
 
-    def getPosition(self):
-        '''Returns np.array with cylindrical coordinates'''
-        return self.position
 
-    def getMomentum(self):
-        '''Returns np.array with cylindrical coordinates'''
-        return self.momentum
 
-        #Generic functions for ALL instance of Muon
+### Generic Methods ###
 
-    @staticmethod
-    def getMass():
-        '''Mass of the muon; 3-decimal places'''
-        return 1.883e-28 #kg
+def mass():
+    '''Returns CODATA Muon Mass from Scipy Package'''
+    return cst.value('muon mass')
 
-    @staticmethod
-    def getCharge():
-        '''Charge of the muon; 3-decimal places'''
-        return 1.602e-19 #C
+def charge():
+    '''Returns CODATA elementary charge from Scipy Package '''
+    return cst.e
