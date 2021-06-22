@@ -4,7 +4,7 @@ import random
 from scipy import constants as cst
 import Muon as mu
 
-class SnoMuonGenerator(object):
+class Generator(object):
     '''A class for a circular generator of muons located with the overburden of SNOLAB.
             The overburden comes into play with the muon's instantiated directions and energies.
 
