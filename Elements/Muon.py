@@ -8,7 +8,7 @@
 import numpy as np
 import scipy.constants as cst
 
-class SnoMuon(object):
+class Muon(object):
     '''The Muon class for our favourite particle to veto. Attenuated by the SNOLAB overburden.
 
     Attributes:

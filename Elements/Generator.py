@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sp
 import random
 from scipy import constants as cst
-import SnoMuon as muon
+import Muon as mu
 
 class SnoMuonGenerator(object):
     '''A class for a circular generator of muons located with the overburden of SNOLAB.
@@ -26,6 +26,8 @@ class SnoMuonGenerator(object):
     def generateMuons(self, numberOfMuons):
         '''Generates a number of muons at random positions on the Disk
             with zenith angles according to the Mei Hime function and random phi angles
+
+            Returns list of muons
 
             NOTE: Energy has not yet been worked out.
         '''
@@ -60,6 +62,6 @@ class SnoMuonGenerator(object):
             #generate a random position on the disk
             position = np.array([rho*np.cos(theta) + self.position[0], rho*np.sin(theta) + self.position[1], self.position[2]])
 
-            muons.append(muon.SnoMuon(position, 1.0, theta ))
+            muons.append(mu.Muon(position, 1.0, theta ))
 
         return muons
