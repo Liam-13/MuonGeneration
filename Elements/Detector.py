@@ -21,6 +21,7 @@ class Detector(object):
 
         self.fill = "Water"
         self.slantDepth = 6.011 #km w.e.
+        self.wallThickness = 2.5 #cm
 
 
     def isInside(self, point):
@@ -47,6 +48,21 @@ class Detector(object):
         else:
             return True
 
-    #def testIntersection(self, track):
+    def testIntersection(self, track):
         '''Returns a boolean indicating whether or not a muon's track intersects
             with the detector'''
+
+            #Calculate how many checks are necessary: 1 every cm
+
+            maxX = abs(track[0]) + self.radius + abs(self.position[0]) #these position values will probably be zero
+            maxY = abs(track[1]) + self.radius + abs(self.position[1])
+            maxZ = abs(track[2])
+
+            iterator = int(100*sqrt(maxX**2 + maxY**2 + maxZ**2))
+
+            muX = track[0]
+            muY = track[1]
+            muZ = track[2]
+
+            for i in range(iterator):
+                #calculate the point of the muon, move it ahead a bit (maintain direction)
