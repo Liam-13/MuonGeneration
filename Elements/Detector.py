@@ -11,7 +11,7 @@ class Detector(object):
         Arguments:
             radius (meters)
             height (meters)
-            position (meters) position of bottom of detector
+            position (meters) position of CENTER of detector
             '''
 
         self.radius = radius
@@ -20,7 +20,7 @@ class Detector(object):
 
         self.fill = "Water"
         self.slantDepth = 6.011 #km w.e.
-        self.wallThickness = 2.5 #cm
+        self.wallThickness = 2.54 #cm
 
 
     def isInside(self, point):
@@ -66,3 +66,5 @@ class Detector(object):
         for i in range(iterator):
             #calculate the point of the muon, move it ahead a bit (maintain direction)
 '''
+
+    
