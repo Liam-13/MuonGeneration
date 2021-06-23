@@ -2,7 +2,7 @@ import numpy as np
 import scipy as sp
 import random
 from scipy import constants as cst
-import Muon as mu
+from Elements import Muon as mu
 
 class Generator(object):
     '''A class for a circular generator of muons located with the overburden of SNOLAB.
@@ -65,3 +65,7 @@ class Generator(object):
             muons.append(mu.Muon(position, 1.0, theta ))
 
         return muons
+
+    def __str__(self):
+        string = "Generator —>[Rad: " + str(self.radius) + "m ], Pos: " + str(self.position) +"\n"
+        return string

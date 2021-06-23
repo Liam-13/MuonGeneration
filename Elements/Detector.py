@@ -6,7 +6,7 @@ class Detector(object):
     '''A rudimentary class for a cylindrical detector'''
 
 
-    def __init__(self, radius, height, position = np.array([0.,0.,0.])):
+    def __init__(self, radius, height, name, position = np.array([0.,0.,0.])):
         '''Constructor for cylindrical detector
         Arguments:
             radius (meters)
@@ -21,7 +21,7 @@ class Detector(object):
         self.fill = "Water"
         self.slantDepth = 6.011 #km w.e.
         self.wallThickness = 2.54 #cm
-        self.name = "nEXO OD"
+        self.name = name
 
 
     def isInside(self, point):
@@ -50,8 +50,10 @@ class Detector(object):
 
 
 
-    def toString(self):
-        string = self.name + "[Rad: " + self.radius + "m , Ht: " + self.height, + "m , Thk: " + self.wallThickness + "cm ]"
+    def __str__(self):
+        string = self.name + " —>[Rad: " + str(self.radius) + "m , Ht: " + str(self.height) + "m , Thk: "\
+         + str(self.wallThickness) + "cm ] Pos:" + str(self.position) +"\n"
+        return string
 
 
 
