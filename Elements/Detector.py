@@ -21,6 +21,7 @@ class Detector(object):
         self.fill = "Water"
         self.slantDepth = 6.011 #km w.e.
         self.wallThickness = 2.54 #cm
+        self.name = "nEXO OD"
 
 
     def isInside(self, point):
@@ -47,6 +48,14 @@ class Detector(object):
         else:
             return True
 
+
+
+    def toString(self):
+        string = self.name + "[Rad: " + self.radius + "m , Ht: " + self.height, + "m , Thk: " + self.wallThickness + "cm ]"
+
+
+
+        '''Renders relevant Detector details into a string'''
     #def testIntersection(self, track):
         '''Returns a boolean indicating whether or not a muon's track intersects
             with the detector'''
@@ -66,5 +75,3 @@ class Detector(object):
         for i in range(iterator):
             #calculate the point of the muon, move it ahead a bit (maintain direction)
 '''
-
-    
