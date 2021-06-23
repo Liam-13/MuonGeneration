@@ -51,10 +51,10 @@ class Muon(object):
         '''Using the position, and angles, this returns a track for the propagating muons
          as an array: [initial_X, initial_Y, initial_Z, zenith, azimuth]'''
 
-         angles = np.array([self.phi, self.theta])
-         position = self.position
-         track = np.append(position, angles)
-         return track
+        angles = np.array([self.phi, self.theta])
+        position = self.r
+        track = np.append(position, angles)
+        return track
 
 
 ### Generic Methods ###
