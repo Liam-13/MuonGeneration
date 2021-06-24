@@ -22,6 +22,7 @@ class Generator(object):
     def __init__(self, radius, position = np.array([0.,0.,10.])):
         self.radius = radius
         self.position = position
+        self.resolution = 1000
 
     def generateMuons(self, numberOfMuons):
         '''Generates a number of muons at random positions on the Disk
@@ -39,16 +40,13 @@ class Generator(object):
         lam1 = 0.45 # ± 0.01 km.w.e.
         lam2 = 0.87 # ± 0.02 km.w.e.
 
-        resolution = 1000
-        phiRad = np.linspace(0, np.pi/2, resolution)
+        #Zenith angle range
+        phiRad = np.linspace(0, np.pi/2, self.resolution)
 
         #Muon Angular distribution intensity
         meiHime = (I1*np.exp(-slantDepth/(lam1*np.cos(phiRad)))+I2*np.exp(-slantDepth/(lam2*np.cos(phiRad))))/np.cos(phiRad)
 
         meiHime = meiHime / np.sqrt(meiHime.sum()**2) #Normalizes the mei hime distribution function
-
-        #Defining a random angle
-        phi = np.random.choice(np.linspace(phiRad[0],phiRad[-1], len(meiHime)),p=meiHime)
 
 
 
@@ -56,13 +54,16 @@ class Generator(object):
 
             #random radius
             rho = random.random()*self.radius
-            #random theta according to the Mei Hime distribution
-            theta = np.random.choice(np.linspace(thetaRad[0],thetaRad[-1], len(meiHime)),p=meiHime)
+
+            #Defining a random Zenith angle according to meiHime
+            phi = np.random.choice(np.linspace(phiRad[0],phiRad[-1], len(meiHime)),p=meiHime)
+
+            theta = 2*random.random()*np.pi
 
             #generate a random position on the disk
             position = np.array([rho*np.cos(theta) + self.position[0], rho*np.sin(theta) + self.position[1], self.position[2]])
 
-            muons.append(mu.Muon(position, 1.0, theta ))
+            muons.append(mu.Muon(position, phi))
 
         return muons
 

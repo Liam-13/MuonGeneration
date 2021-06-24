@@ -28,3 +28,12 @@ Gen_Position = np.array([0.,0.,20.0 + OD_Height/2]) #20 m above Detector
 print("Instantiating Generator:")
 MuonGen = gen.Generator(Gen_Radius, Gen_Position)
 print(str(MuonGen))
+
+
+### Generate Muons ###
+numMuons = 10
+
+muons = MuonGen.generateMuons(numMuons)
+
+for i in range(numMuons):
+    print(str(muons[i]))
