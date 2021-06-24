@@ -30,20 +30,20 @@ class Muon(object):
 
     #For random choices
     angleResolution = 1000
-    phis = np.linspace(0,np.pi*2,angleResolution) #Arbitrary resolution at 1000 different angles
+    thetas = np.linspace(0,np.pi*2,angleResolution) #Arbitrary resolution at 1000 different angles
 
     #Zenith angle distribution according to Mei and Hime 2004
 
 
 
-    def __init__(self, initial_position, phi, energy = 1.0, theta = np.random.choice(phis)):
+    def __init__(self, initial_position, phi, energy = 1.0):
         '''Built to initialize a muon with a position, energy and direction
             dictated by the two angles of spherical coordinates
         '''
 
         #Basic assignment of initial position
         self.r = initial_position
-        self.theta = theta  #Radially symmetric
+        self.theta = np.random.random()*np.pi*2  #Radially symmetric
         self.energy = energy
         self.phi = phi
 
@@ -56,6 +56,9 @@ class Muon(object):
         track = np.append(position, angles)
         return track
 
+    def __str__(self):
+        string = "MUON: [Phi: " + str(self.phi) + " Theta: " + str(self.theta) +"] POS:" + str(self.r) +"\n"
+        return string
 
 ### Generic Methods ###
 
