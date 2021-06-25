@@ -17,8 +17,6 @@ class Generator(object):
 
     '''
 
-
-
     def __init__(self, radius, position = np.array([0.,0.,10.])):
         self.radius = radius
         self.position = position

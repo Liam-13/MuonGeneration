@@ -32,9 +32,6 @@ class Muon(object):
     angleResolution = 1000
     thetas = np.linspace(0,np.pi*2,angleResolution) #Arbitrary resolution at 1000 different angles
 
-    #Zenith angle distribution according to Mei and Hime 2004
-
-
 
     def __init__(self, initial_position, phi, energy = 1.0):
         '''Built to initialize a muon with a position, energy and direction
