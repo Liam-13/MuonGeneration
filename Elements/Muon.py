@@ -47,17 +47,32 @@ class Muon(object):
         self.energy = energy
         self.phi = phi
 
-    def getTrack(self):
-        '''Using the position, and angles, this returns a track for the propagating muons
-         as an array: [initial_X, initial_Y, initial_Z, zenith, azimuth]'''
+    #def getTrack(self):
+        #'''Using the position, and angles, this returns a track for the propagating muons
+        # as an array: [initial_X, initial_Y, initial_Z, zenith, azimuth]'''
 
+        #angles = np.array([self.phi, self.theta])
+        #position = self.r
+        #track = np.append(position, angles)
+        #return track
+
+    def getTrack(self):
+        '''Using the position, and angles, this returns a track as a unit vector
+        in cartesian coordinates
+        '''
         angles = np.array([self.phi, self.theta])
         position = self.r
-        track = np.append(position, angles)
+
+        x = np.array([position[0], np.sin(self.theta)*np.cos(self.phi)])
+        y = np.array([position[1], np.sin(self.theta)*np.sin(self.phi)])
+        z = np.array([position[2], -np.cos(self.phi)])
+
+        track = np.append(x,y,z)
         return track
 
+
     def __str__(self):
-        string = "MUON: [Phi: " + str(self.phi) + " Theta: " + str(self.theta) +"] POS:" + str(self.r) +"\n"
+        string = "[Phi: " + str(self.phi) + " Theta: " + str(self.theta) +"] POS:" + str(self.r) +"\n"
         return string
 
 ### Generic Methods ###
