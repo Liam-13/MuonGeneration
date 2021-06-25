@@ -1,7 +1,10 @@
 # MuonGeneration
 
+## Incomplete README.
+Methods to be described in detail when the code is sufficient for our uses.
+
 ### A Muon Class
-	To hold the Muon attributes 
+	To hold the Muon attributes
 		1. Initial Position
 		2. Track (direction)
 		3. Energy (Kinetic)
@@ -9,7 +12,7 @@
 
 ### A Detector Class
 	To hold abstracted Detector Geometry
-		1. Detector Radius 
+		1. Detector Radius
 		2. Detector Height
 		3. Detector Position
 
@@ -25,5 +28,3 @@
 		1. Muon Generator
 		2. Muons
 		3. CSV API
-		
-

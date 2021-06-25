@@ -1,6 +1,5 @@
 import numpy as np
 from Elements import Muon as mu
-import queue as q
 from scipy import constants as cst
 
 
@@ -56,6 +55,7 @@ class Detector(object):
 
     def testIntersection(self, muon):
         '''Returns entry and exit points of a muon passing through the detector.
+            [x1,y1,z1,x2,y2,z2]
             If the muon does not intersect, returns None
         '''
 
@@ -74,13 +74,31 @@ class Detector(object):
 
         muPos = np.array([track[0], track[2], track[4]]) #see convention, x,y,z (muon.py)
 
-        #instantiate test queue to determine entry/exit points
-        intersectionQueue = q.queue(maxsize=2)
+        #instantiate tuple for entry/exit testing
+        intersectionQueue = (False, False)
+        entry = np.empty(3)
+        exit = np.empty(3)
 
         for i in range(iterator):
-            #check if the point is inside
-            #if isInside(muPos):
 
+            if intersectionQueue == (False, True):
+                #we found the entry point
+                entry = muPos
+            elif intersectionQueue == (True, False):
+                #we found the exit point
+                exit = muPos
+                return np.append(entry,exit)
+            elif i == iterator:
+                return None
+
+
+            #Move point over
+            intersectionQueue[1] = intersectionQueue[2]
+            #check if the point is inside
+            if isInside(muPos):
+                intersectionQueue[2] = True
+            else:
+                intersectionQueue[2] = False
             pass
 
             #calculate the point of the muon, move it ahead a bit (maintain direction)
