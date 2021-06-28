@@ -76,7 +76,7 @@ class Detector(object):
         muPos = np.array([track[0], track[2], track[4]]) #see convention, x,y,z (muon.py)
         muDir = np.array([track[1], track[3], track[5]])
 
-        #instantiate tuple for entry/exit testing
+        #instantiate list for entry/exit testing
         intersectionQueue = [False, False]
         entry = np.empty(3)
         exit = np.empty(3)
@@ -90,7 +90,7 @@ class Detector(object):
                 #we found the exit point
                 exit = muPos
                 return np.append(entry,exit)
-            elif i == iterator:
+            elif i == iterator - 1:
                 return None
 
 

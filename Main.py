@@ -34,8 +34,8 @@ print(str(OD))
 
 
 ### Generator Parameters ###
-Gen_Radius = 100 #m
-Gen_Position = np.array([0.,0.,20.0 + OD_Height/2]) #20 m above Detector
+Gen_Radius = 20 #m
+Gen_Position = np.array([0.,0.,5.0 + OD_Height/2]) #20 m above Detector
 #Instantiation
 print("Instantiating Generator:")
 MuonGen = gen.Generator(Gen_Radius, Gen_Position)
@@ -49,7 +49,12 @@ outputFile = open(args.outputFile, 'a')
 
 ### Generate Muons ###
 muons = MuonGen.generateMuons(args.numOfMuons)
-
+count = 0
 for i in range(args.numOfMuons):
-    outputFile.write(str(muons[i]))
-    outputFile.write(str(OD.testIntersection(muons[i])))
+    #outputFile.write(str(muons[i]))
+    if not OD.testIntersection(muons[i]) is None:
+        outputFile.write(str(OD.testIntersection(muons[i]))+ "\n")
+        #outputFile.write("\n")
+        count += 1
+
+outputFile.write(str(count))
