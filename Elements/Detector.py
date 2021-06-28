@@ -105,4 +105,4 @@ class Detector(object):
                     return None
 
             #calculate the point of the muon, move it ahead a bit (maintain direction)
-            muPos += muDir*2 # 2cm at a time?
+            muPos += muDir*0.02 # 2cm at a time?
