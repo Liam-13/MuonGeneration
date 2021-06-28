@@ -3,6 +3,7 @@ from Elements import Muon as mu
 from scipy import constants as cst
 
 
+
 class Detector(object):
     '''A rudimentary class for a cylindrical detector'''
 
@@ -65,26 +66,27 @@ class Detector(object):
             return None
 
         #Calculate how many checks are necessary: 1 every cm
-        track = muon.mu.getTrack()
+        track = muon.getTrack()
         maxX = abs(track[0]) + self.radius + abs(self.position[0]) #these position values will probably be zero
         maxY = abs(track[2]) + self.radius + abs(self.position[1])
         maxZ = abs(track[4])
-        iterator = int(100*sqrt(maxX**2 + maxY**2 + maxZ**2))
+        iterator = int(100*np.sqrt(maxX**2 + maxY**2 + maxZ**2))
         #something like the highest possible number of centimeters
 
         muPos = np.array([track[0], track[2], track[4]]) #see convention, x,y,z (muon.py)
+        muDir = np.array([track[1], track[3], track[5]])
 
         #instantiate tuple for entry/exit testing
-        intersectionQueue = (False, False)
+        intersectionQueue = [False, False]
         entry = np.empty(3)
         exit = np.empty(3)
 
         for i in range(iterator):
 
-            if intersectionQueue == (False, True):
+            if intersectionQueue == [False, True]:
                 #we found the entry point
                 entry = muPos
-            elif intersectionQueue == (True, False):
+            elif intersectionQueue == [True, False]:
                 #we found the exit point
                 exit = muPos
                 return np.append(entry,exit)
@@ -93,12 +95,14 @@ class Detector(object):
 
 
             #Move point over
-            intersectionQueue[1] = intersectionQueue[2]
+            intersectionQueue[0] = intersectionQueue[1]
             #check if the point is inside
-            if isInside(muPos):
-                intersectionQueue[2] = True
+            if self.isInside(muPos):
+                intersectionQueue[1] = True
             else:
-                intersectionQueue[2] = False
-            pass
+                intersectionQueue[1] = False
+                if i > iterator/2:
+                    return None
 
             #calculate the point of the muon, move it ahead a bit (maintain direction)
+            muPos += muDir*2 # 2cm at a time?

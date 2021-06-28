@@ -52,3 +52,4 @@ muons = MuonGen.generateMuons(args.numOfMuons)
 
 for i in range(args.numOfMuons):
     outputFile.write(str(muons[i]))
+    outputFile.write(str(OD.testIntersection(muons[i])))

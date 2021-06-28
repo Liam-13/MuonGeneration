@@ -55,7 +55,7 @@ class Muon(object):
 
     def getTrack(self):
         '''Using the position, and angles, this returns a track as a unit vector
-        in cartesian coordinates
+        in cartesian coordinates with the initial positions [x_0, x_component, y_0, y_component, z_0, z_component]
         '''
         angles = np.array([self.phi, self.theta])
         position = self.r
@@ -63,8 +63,8 @@ class Muon(object):
         x = np.array([position[0], np.sin(self.theta)*np.cos(self.phi)])
         y = np.array([position[1], np.sin(self.theta)*np.sin(self.phi)])
         z = np.array([position[2], -np.cos(self.phi)])
-
-        track = np.append(x,y,z)
+        y = np.append(y,z)
+        track = np.append(x,y)
         return track
 
 
